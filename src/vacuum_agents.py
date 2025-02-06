@@ -25,19 +25,5 @@ def state_agent(percept):
     # what it has seen (dirty or clean square)
     # what it has done (which direction it has moved)
 
-    if percept:
-        action = 'clean'
-    elif not percept and switch == 1: #if clean and switch is 0
-        action = 'north'
-    elif not percept and switch == -1: #if clean and switch is 0
-        action = 'south'
-
-    if last_square_status == False & percept == False:
-        action = 'east'
-
-    print(last_square_status)
-    print(last_movement)
-    return action
-
 run(20,5000,state_agent)
 print(many_runs(20, 50000, 1, random_agent))
