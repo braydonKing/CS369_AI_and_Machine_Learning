@@ -21,7 +21,7 @@ def random_agent(percept):
     return action
 
 def state_agent(percept):
-# allowed to remember:
+#allowed to remember:
     # what it has seen (dirty or clean square)
     # what it has done (which direction it has moved)
 
