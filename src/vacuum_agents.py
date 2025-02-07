@@ -13,7 +13,6 @@ last_square_status = True
 last_movement = None
 switch = 1
 count = 0
-side_direction = 1
 steps = 50000
 
 def reflex_agent(percept):
@@ -34,9 +33,9 @@ def state_agent(percept):
     #allowed to remember:
     # what it has seen (dirty or clean square)
     # what it has done (which direction it has moved)
-    # counters okay??
+    # counters
 
-    global last_movement,last_square_status,switch,count,side_direction
+    global last_movement,last_square_status,switch,count
 
     if percept: #if dirty, clean square. Otherwise, move 'north' or 'south'.
         action = 'clean'
