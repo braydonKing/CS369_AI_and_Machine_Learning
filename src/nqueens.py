@@ -1,0 +1,4 @@
+
+
+def nqueens():
+    return True
