@@ -1,5 +1,3 @@
-from html.parser import commentclose
-
 from vacuum import *
 import random
 
