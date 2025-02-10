@@ -62,5 +62,5 @@ def state_agent(percept):
     return action
 
 
-#run(20,5000,state_agent)
+run(20,5000,state_agent)
 print(many_runs(20, 50000, 10, state_agent))
