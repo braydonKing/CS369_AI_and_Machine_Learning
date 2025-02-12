@@ -24,8 +24,37 @@ def solves(solver, n):
 def test_3_queens():
     assert not nqueens(3)  # There is no solution
 
+
+def test_finds_completion_after_one_move():
+    """
+    For a 5x5 grid, 5 queens:
+
+    o o o X o
+    o X o o o
+    o o o o X
+    o o X o o
+    X o o o o
+    answer = [0,2,4,1,3]
+
+    *numbers inside array=col
+    *array index=row
+
+    methods:
+
+    check_diagonal(): check if queen is attacking another diagonally.
+    check_vertical(): check if queen is attacking vertically.
+
+    *do not need check_horizontal() here because we are recursively going through the list of values.*
+
+    add_queen(): add a queen to board the at specified row,col.
+
+
+    """
+    assert nqueens(nqueens(5)) == [0,2,4,1,3]
+
 def test_5_queens():
     assert solves(nqueens, 5)
+
 
 def test_8_queens():
     assert solves(nqueens, 8)
