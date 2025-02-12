@@ -18,12 +18,9 @@ def check_vertical(queen):
 
 
 def add_queen(col):
-    if check_col(col):
+    if check_vertical(col) and check_diagonal(col):
         pass
-    else:
-        check_diagonal(col)
-        check_horizontal(col)
-        check_vertical(col)
+
 
 def nqueens(num_queens):
     if 1 < num_queens < 3: #no solution
