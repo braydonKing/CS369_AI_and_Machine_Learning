@@ -1,4 +1,5 @@
-from nqueens import nqueens
+from nqueens import *
+
 
 def solves(solver, n):
     """
@@ -24,6 +25,18 @@ def solves(solver, n):
 def test_3_queens():
     assert not nqueens(3)  # There is no solution
 
+def test__vertical_attack():
+    sol = [0,1,2]
+    assert conflicts_vertical(0,sol) == True #finds 1 in the solution list therefore returns True
+
+def test_diagonal_does_conflict():
+    sol = [0,4,2]
+    assert conflicts_diagonal(0,0,sol) == True
+
+def test_diagonal_does_not_conflict():
+    sol=[0,2,4]
+    assert conflicts_diagonal(0,0,sol) == False
+
 
 def test_finds_completion_after_one_move():
     """
@@ -36,8 +49,8 @@ def test_finds_completion_after_one_move():
     X o o o o
     answer = [0,2,4,1,3]
 
-    *numbers inside array=col
-    *array index=row
+    *values of indicies = col
+    *array index = row
 
     methods:
 
