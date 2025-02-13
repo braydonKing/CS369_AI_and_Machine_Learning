@@ -38,7 +38,7 @@ def test_diagonal_does_not_conflict():
     assert conflicts_diagonal(0,0,sol) == False
 
 
-def test_finds_completion_after_one_move():
+def test_finds_completion_for_simple_grid():
     """
     For a 5x5 grid, 5 queens:
 
@@ -63,14 +63,14 @@ def test_finds_completion_after_one_move():
 
 
     """
-    assert nqueens(nqueens(5)) == [0,2,4,1,3]
+    assert nqueens(5) == [0,2,4,1,3]
 
 def test_5_queens():
-    assert solves(nqueens, 5)
+    assert solves(nqueens_backtracking, 5)
 
 
 def test_8_queens():
-    assert solves(nqueens, 8)
+    assert solves(nqueens_backtracking, 8)
 
 def test_20_queens():
-    assert solves(nqueens, 20)
+    assert solves(nqueens_backtracking, 20)
