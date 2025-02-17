@@ -35,26 +35,7 @@ def queen_conflict(row,col,solution):
     else:
         return False
 
-
 def nqueens(num_queens):
-    solution = []
-
-    if 1 < num_queens < 4: #no solution
-        return solution
-
-    def add_queen(row):
-        if row == num_queens:  # Base case, all queens have been placed
-            return solution
-
-        for col in range(num_queens): #For each col on the board
-            if not queen_conflict(row,col,solution):#Verify legality of move
-                solution_cp = solution + [col]
-                result = add_queen(row+1)
-                if result: #If adding a queen to the next row completes the problem, return the solution.
-                    return solution_cp
-    return add_queen(0) #start at row zero
-
-def nqueens_backtracking(num_queens):
     solution = []
     if 1 < num_queens < 4: #no solution
         return solution
