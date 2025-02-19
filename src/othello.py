@@ -79,9 +79,15 @@ def score(board):
     :return: The difference between the number of pieces 'X' has and the number 'O' has. This is therefore positive if
     'X' is winning, negative if 'O' is winning, and 0 if the score is tied.
     """
-    # TODO You have to write this one
-    pass  # Start by removing this line, which is just here so that the code is valid Python
-
+    xCount = 0
+    oCount = 0
+    for i in range(len(board)):
+        for j in board[i]:
+            if j == 'X':
+                xCount+=1
+            elif j =='O':
+                oCount+=1
+    return xCount - oCount
 
 def opposite(player):
     if player == 'X':
@@ -96,7 +102,11 @@ def value(board, player, depth):
     :param depth: At least 1; greater depth is slower but smarter
     :return: The value of board if it is player's turn
     """
-    # TODO You have to write this one
+    # TODO you have to write this one.
+    for i in range(len(board)):
+        pass
+
+
     pass  # Start by removing this line, which is just here so that the code is valid Python
 
 
