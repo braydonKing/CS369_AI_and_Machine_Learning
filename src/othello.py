@@ -1,5 +1,4 @@
-# Team members who contributed to this project:
-#
+# Team members who contributed to this project: Ishan and Braydon
 
 INITIAL_STATE = ('........',) * 3 + ('...XO...', '...OX...') + ('........',) * 3
 
@@ -79,15 +78,15 @@ def score(board):
     :return: The difference between the number of pieces 'X' has and the number 'O' has. This is therefore positive if
     'X' is winning, negative if 'O' is winning, and 0 if the score is tied.
     """
-    xCount = 0
-    oCount = 0
-    for i in range(len(board)):
-        for j in board[i]:
-            if j == 'X':
-                xCount+=1
-            elif j =='O':
-                oCount+=1
-    return xCount - oCount
+    res = 0
+    for row in board:
+        for piece in row:
+            if piece == 'X':
+                res+=1
+            elif piece == 'O':
+                res-=1
+    return res
+
 
 def opposite(player):
     if player == 'X':
@@ -102,13 +101,30 @@ def value(board, player, depth):
     :param depth: At least 1; greater depth is slower but smarter
     :return: The value of board if it is player's turn
     """
-    # TODO you have to write this one.
-    for i in range(len(board)):
-        pass
+    def find_value(b, p, d, compare, worst):
+        if not legal_moves(b, p):
+            return 0
+        best_val = worst
+        if d == 1:  # handles case of depth being one = target depth, where we return best possible move
+            for move in legal_moves(b, p):
+                s = successor(b, p, move)
+                if compare(score(s), best_val):
+                    best_val = score(s)
+            return best_val
+        for move in legal_moves(b, p):
+            s = successor(b, p, move)
+            if player == 'X':  # turn for 'O'
+                v = find_value(s, 'O', d - 1, less, float('inf'))
+            else:  # turn for 'X'
+                v = find_value(s, 'X', d - 1, greater, -float('inf'))
+            if compare(v, best_val):
+                best_val = v
+        return best_val
 
-
-    pass  # Start by removing this line, which is just here so that the code is valid Python
-
+    if player == 'X':
+        return find_value(board, 'X', depth, greater, -float('inf'))
+    else:
+        return find_value(board, 'O', depth, less, float('inf'))
 
 def less(x, y):
     return x < y
@@ -126,7 +142,33 @@ def best_move(board, player, depth):
     :return: The best move (index) for player
     """
     # TODO You have to write this one
-    pass  # Start by removing this line, which is just here so that the code is valid Python
+    def find_move(b, p, d, compare, worst):
+        if not legal_moves(b, p):
+            return 0
+        best_val = worst
+        BestMove = None
+        if d == 1:  # handles case of depth being one = target depth, where we return best possible move
+            for move in legal_moves(b, p):
+                s = successor(b, p, move)
+                if compare(score(s), best_val):
+                    best_val = score(s)
+                    BestMove = move
+            return BestMove
+        for move in legal_moves(b, p):
+            s = successor(b, p, move)
+            if player == 'X':  # turn for 'O'
+                v = value(s,'O',d-1)
+            else:  # turn for 'X'
+                v = value(s,'X',d-1)
+            if compare(v, best_val):
+                best_val = v
+                BestMove = move
+        return BestMove
+
+    if player == 'X':
+        return find_move(board, 'X', depth, greater, -float('inf'))
+    else:
+        return find_move(board, 'O', depth, less, float('inf'))
 
 
 def print_board(board):
@@ -140,6 +182,7 @@ def print_board(board):
 def main():
     board = INITIAL_STATE
     player = 'X'
+    count = 0
     while True:
         moves = legal_moves(board, player)
         if not moves:
@@ -147,12 +190,9 @@ def main():
         if moves == ['pass']:
             move = 'pass'
         elif player == 'X':
-            move = best_move(board, player, 5)  # Adjust this number for a stronger, slower player
+            move = best_move(board, player, 1)  # Adjust this number for a stronger, slower player
         else:
-            print('Your move.')
-            r = int(input('Row: '))
-            c = int(input('Column: '))
-            move = (r, c)
+            move = best_move(board, player, 3)
         board = successor(board, player, move)
         print_board(board)
         player = opposite(player)
@@ -163,7 +203,6 @@ def main():
         print('O wins!')
     else:
         print('Tie.')
-
 
 if __name__ == '__main__':
     main()
