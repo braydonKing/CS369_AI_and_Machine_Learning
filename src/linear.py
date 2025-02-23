@@ -1,3 +1,11 @@
+
+"""
+AUTHOR: <Braydon King>
+
+Program to estimate the line of best fit given a set of x and y values. Uses both the closed form
+equation for linear regression, and the gradient descent formula to estimate this line.
+"""
+
 import matplotlib.pyplot as plt
 import math
 
@@ -45,7 +53,7 @@ def regress_normal_gradient_descent(xs, ys):
     x_bar = sum(xs) / len(xs)
     y_bar = sum(ys) / len(ys)
 
-    #sqrt(SUM(ys-ybar)^2/SUM(xs-xbar)^2) = b1
+    #b1 = sqrt(SUM(ys-ybar)^2/SUM(xs-xbar)^2)
     num,denom = 0,0
     for i in range(len(xs)):
         num = num + (ys[i]-y_bar)**2
