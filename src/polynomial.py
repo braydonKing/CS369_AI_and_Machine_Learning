@@ -44,6 +44,7 @@ def generate_data(m, coefficients):
 
 
 
+
 def plot_data(X, y):
     """
     Plots X and y (as a scatter plot) and also constrains the y limit so that later, much larger values of y will not
