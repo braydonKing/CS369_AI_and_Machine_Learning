@@ -31,12 +31,9 @@ def generate_data(m, coefficients):
     """
     # TODO You have to write this
     x_array = np.linspace(-5,5,m).reshape(m,1)
-    y_array = []
-    i=0
-    for xs in x_array:
-        y = (coefficients[0]+coefficients[1])*xs+coefficients[2]*pow(xs,2)+coefficients[3]*pow(xs,3)+coefficients[4]*pow(xs,4) + np.random.randn(m,1)
-        y_array.append(y)
-        i+=1
+    y_array = coefficients[0] + coefficients[1] * x_array + coefficients[2] * x_array**2 + coefficients[3] * x_array**3 + \
+        coefficients[4] * x_array**4 + np.random.randn(m, 1)
+
     return x_array, y_array
 
 
@@ -130,7 +127,7 @@ def experiment_2(m):
 
 
 if __name__ == '__main__':
-    # generate_and_plot_data(100)
+    generate_and_plot_data(100)
     # experiment_1(20)
     # experiment_2(20)
     pass
