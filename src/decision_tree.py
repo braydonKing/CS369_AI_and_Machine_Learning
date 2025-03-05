@@ -30,6 +30,8 @@ def impurity(data):
     :return: The Gini impurity of the data, as per equation 6.1 on p. 197 of Géron.
     """
     # TODO You have to write this
+    #Gi = 1 - ratio of
+    pass
 
 
 def split_cost(data, attribute, value):
