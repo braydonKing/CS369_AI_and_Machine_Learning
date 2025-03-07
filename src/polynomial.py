@@ -29,17 +29,11 @@ def generate_data(m, coefficients):
     where coefficients is (a, b, c, d, e) and the noise for each point is normally distributed with mean 0 and
     standard deviation 1.
     """
-    # TODO You have to write this
     x_array = np.linspace(-5,5,m).reshape(m,1)
     y_array = coefficients[0] + coefficients[1] * x_array + coefficients[2] * x_array**2 + coefficients[3] * x_array**3 + \
         coefficients[4] * x_array**4 + np.random.randn(m, 1)
 
     return x_array, y_array
-
-
-
-
-
 
 
 def plot_data(X, y):
@@ -88,8 +82,14 @@ def plot_curve(degree, model):
 def mse(X, y, degree, model):
     """
     Returns the mean squared error for model (a polynomial of the specified degree) on X and y.
+    (1/n) Σ(Yi - Ŷi)^2
     """
-    # TODO You have to write this
+    x_model = PolynomialFeatures(degree, include_bias=False).fit_transform(X)
+    y_model = model.predict(x_model)
+    sigma = sum((y - y_model)**2)
+    MSE = (1/len(y)) * sigma
+    error = MSE[0] #get value inside array or else will not work with mean function
+    return error
 
 
 
@@ -137,6 +137,6 @@ def experiment_2(m):
 
 if __name__ == '__main__':
     # generate_and_plot_data(100)
-    experiment_1(20)
-    # experiment_2(20)
+    # experiment_1(20)
+    experiment_2(20)
     pass
