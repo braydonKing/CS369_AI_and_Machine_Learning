@@ -66,7 +66,10 @@ def fit_curve(X, y, degree):
     """
     Returns a trained model that fits a polynomial of the specified degree to the data.
     """
-    # TODO You have to write this
+    x_poly = PolynomialFeatures(degree,include_bias=False).fit_transform(X)
+    lin_reg = LinearRegression()
+    lin_reg.fit(x_poly, y)
+    return lin_reg
 
 
 def plot_curve(degree, model):
@@ -74,7 +77,12 @@ def plot_curve(degree, model):
     Plots a curve for model, which represents a polynomial of the specified degree.
     The x values for the curve are 100 points evenly spaced across the interval [-5.0, 5.0].
     """
-    # TODO You have to write this
+    x_points = np.linspace(-5,5,100).reshape(100,1)
+    x_model = PolynomialFeatures(degree,include_bias=False).fit_transform(x_points)
+    y_model = model.predict(x_model)
+    plt.plot(x_points,y_model, label=f'degree {str(degree)}')
+
+
 
 
 def mse(X, y, degree, model):
@@ -82,6 +90,7 @@ def mse(X, y, degree, model):
     Returns the mean squared error for model (a polynomial of the specified degree) on X and y.
     """
     # TODO You have to write this
+
 
 
 def experiment_1(m):
@@ -127,7 +136,7 @@ def experiment_2(m):
 
 
 if __name__ == '__main__':
-    generate_and_plot_data(100)
-    # experiment_1(20)
+    # generate_and_plot_data(100)
+    experiment_1(20)
     # experiment_2(20)
     pass
