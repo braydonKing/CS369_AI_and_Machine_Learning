@@ -27,7 +27,7 @@ class OutputNeuron:
         s = sum(self.weights[i] * self.previous_layer[i].activation for i in range(len(self.previous_layer)))
         self.activation = logistic(s)
 
-    def update_delta(self, target):
+    def update_delta(self, target): #completed!
         """
         Update the delta value for this neuron. Also, backpropagate delta values to neurons in
         the previous layer.
@@ -37,7 +37,7 @@ class OutputNeuron:
         t = target
         self.delta = -a * (1 - a) * (t - a)
         for unit, weight in zip(self.previous_layer[1:], self.weights[1:]):
-            unit.delta += None  # TODO Replace None with the correct formula
+            unit.delta += self.delta*weight #Computes the Sigma portion of the equation
 
     def update_weights(self):
         """
@@ -47,11 +47,13 @@ class OutputNeuron:
             self.weights[j] += -LEARNING_RATE * self.previous_layer[j].activation * self.delta
 
 
-class HiddenNeuron:
-    # TODO You have to write this. It is almost identical to OutputNeuron, but it has a different
+class HiddenNeuron(OutputNeuron): #completed! Did optional challenge of using inheritance instead of copy & pasting
+
+    # You have to write this. It is almost identical to OutputNeuron, but it has a different
     # update_delta method which doesn't take target as an argument.  You can copy and paste or
     # use inheritance.
-    pass
+    def __init__(self, previous_layer):
+        super().__init__(previous_layer)
 
 
 class Network:
