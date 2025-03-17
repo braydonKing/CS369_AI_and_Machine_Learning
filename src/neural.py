@@ -1,5 +1,10 @@
+
+"""Authors: <Stas Ivanov>, <Braydon King>
+"""
+
 import math
 import random
+import matplotlib.pyplot as plt
 
 
 LEARNING_RATE = 1
@@ -54,6 +59,10 @@ class HiddenNeuron(OutputNeuron): #completed! Did optional challenge of using in
     # use inheritance.
     def __init__(self, previous_layer):
         super().__init__(previous_layer)
+    
+    def update_delta(self):
+        a = self.activation
+        self.delta = a * (1 - a) * sum(n.delta * n.weights[self.index + 1] for n in self.next_layer)
 
 
 class Network:
@@ -65,23 +74,39 @@ class Network:
         self.layers = [None] * len(sizes)
         self.layers[0] = [InputNeuron() for _ in range(sizes[0])]
         for i in range(1, len(sizes) - 1):
-            self.layers[i] = [HiddenNeuron(self.layers[i-1]) for _ in range(sizes[i])]
+            self.layers[i] = [HiddenNeuron(self.layers[i - 1]) for _ in range(sizes[i])]
         self.layers[-1] = [OutputNeuron(self.layers[-2]) for _ in range(sizes[-1])]
+        
+        # Assign next_layer references for backpropagation
+        for i in range(1, len(sizes) - 1):
+            for j, neuron in enumerate(self.layers[i]):
+                neuron.next_layer = self.layers[i + 1]
+                neuron.index = j  # Store the neuron's index for correct weight referencing
+
 
     def predict(self, inputs):
         """
         :param inputs: Values to use as activations of the input layer.
         :return: The predictions of the neurons in the output layer.
         """
-        # TODO You have to write this
-        pass
+        # set the input values in the first layer
+        for i, val in enumerate(inputs):
+            self.layers[0][i].activation = val
+        
+        # move forward through the network layer by layer and update activations for each neuron based on the previous layer
+        for layer in self.layers[1:]:
+            for neuron in layer:
+                neuron.update_activation()
+        return [neuron.activation for neuron in self.layers[-1]]
+
 
     def reset_deltas(self):
         """
         Set the deltas for all units to 0.
         """
-        # TODO You have to write this
-        pass
+        for layer in self.layers:
+            for neuron in layer:
+                neuron.delta = 0
 
     def update_deltas(self, targets):
         """
@@ -89,15 +114,20 @@ class Network:
         been called, so all neurons have had their activations updated.
         :param targets: The desired activations of the output neurons.
         """
-        # TODO You have to write this
-        pass
+        for neuron, target in zip(self.layers[-1], targets):
+            neuron.update_delta(target)
+        
+        for layer in reversed(self.layers[1:-1]):
+            for neuron in layer:
+                neuron.update_delta()
 
     def update_weights(self):
         """
         Update the weights of all neurons.
         """
-        # TODO You have to write this
-        pass
+        for layer in self.layers[1:]:
+            for neuron in layer:
+                neuron.update_weights()
 
     def train(self, inputs, targets):
         """
@@ -111,9 +141,41 @@ class Network:
         self.update_deltas(targets)
         self.update_weights()
 
+    def train_with_plot(self, inputs, targets, epochs=1000):
+        errors = [] # store mean squared error for each epoch
+        for _ in range(epochs):
+            total_error = 0
+            for i, t in zip(inputs, targets):
+                self.train(i, t) # train the network on each input-target pair
+                predictions = self.predict(i)
+                total_error += mean_squared_error(predictions, t) # total error track
+            errors.append(total_error / len(inputs)) # average error
+        
+        # plot of the error over time
+        plt.plot(errors)
+        plt.xlabel('Epochs')
+        plt.ylabel('Mean Squared Error')
+        plt.title('Training Error Over Time')
+        plt.show()
+
 
 def logistic(x):
     """
     Logistic sigmoid squashing function.
     """
     return 1 / (1 + math.exp(-x))
+
+def mean_squared_error(predictions, targets):
+    # calculate how far off we are from the correct values
+    return sum((p - t) ** 2 for p, t in zip(predictions, targets)) / len(targets)
+
+if __name__ == "__main__":
+    # EXAMPLE DATASET
+    inputs = [[0, 0], [0, 1], [1, 0], [1, 1]] # input values
+    targets = [[0], [1], [1], [1]] # expected outputs
+    
+    # simple network with 2 inputs and 1 output
+    net = Network([2, 1])
+    
+    # train the network and plot how the error changes over time
+    net.train_with_plot(inputs, targets, epochs=1000)
