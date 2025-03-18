@@ -29,9 +29,22 @@ def impurity(data):
     :param data: A sequence of Datum objects.
     :return: The Gini impurity of the data, as per equation 6.1 on p. 197 of Géron.
     """
-    # TODO You have to write this
-    #Gi = 1 - ratio of
-    pass
+    #Gi = 1 - sum of pi,k^2
+    p_instances = {}
+
+    for datum in data:
+        target = datum.target
+        if target in p_instances:
+            p_instances[target] += 1
+        else:
+            p_instances[target] = 1
+
+    k = len(data)
+
+    # Calculate the sum of (pi,k^2) for each target's probability to get Geni impurity
+    Gi = 1 - sum((pi / k) ** 2 for pi in p_instances.values())
+
+    return Gi
 
 
 def split_cost(data, attribute, value):
@@ -41,16 +54,41 @@ def split_cost(data, attribute, value):
     :param value: The value to distinguish from other values at this node.
     :return: The cost of splitting in this way, as per equation 6.2 on p. 200 of Géron.
     """
-    # TODO You have to write this
+    left_data = [datum for datum in data if datum.attributes[attribute] == value]
+    right_data = [datum for datum in data if datum.attributes[attribute] != value]
 
+    m_left = len(left_data)
+    m_right = len(right_data)
+
+    m=len(data)
+
+    left_Gi = impurity(left_data)
+    right_Gi = impurity(right_data)
+
+    split_cost_value = (m_left / m) * left_Gi + (m_right / m) * right_Gi
+
+    return split_cost_value
 
 def best_split(data):
     """
     :param data: A sequence of Datum objects.
     :return: The best attribute and value to split on at this node.
     """
-    # TODO You have to write this
     # Hint: Return two values
+    best_attribute = None #best_attribute and best_value initialized to None
+    best_value = None
+    best_split_cost = float('inf') # best_split_cost initialized to very high value
+
+    for attribute in ATTRIBUTES:
+        unique_values = set(datum.attributes[attribute] for datum in data)
+
+        for value in unique_values:
+            value_cost = split_cost(data, attribute, value)
+            if value_cost < best_split_cost:
+                best_split_cost = value_cost
+                best_attribute = attribute
+                best_value = value
+    return best_attribute, best_value
 
 
 class Tree:
@@ -58,6 +96,15 @@ class Tree:
     def __init__(self, data):
         # TODO You have to write this to build the tree from data
         # Hint: It's recursive, because you may be building subtree
+
+        self.data = data
+        self.left = None
+        self.right = None
+        self.split_attribute = None
+        self.split_value = None
+        self.prediction = None
+
+
         pass
 
     def __repr__(self, indent=''):
