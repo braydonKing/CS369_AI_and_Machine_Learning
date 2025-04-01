@@ -1,3 +1,10 @@
+
+
+
+"""
+Author: <Braydon King>
+"""
+
 import math
 
 ATTRIBUTES = ('Alternative', 'Bar', 'Friday/Saturday', 'Hungry', 'Patrons', 'Price', 'Raining',
@@ -103,6 +110,16 @@ class Tree:
         self.split_attribute = None
         self.split_value = None
         self.prediction = None
+
+        if impurity(self.data) == 0:
+            self.prediction = self.data[0].target
+        else:
+            self.attribute,self.split_value = best_split(data)[0]
+            self.left = Tree(self.data[:len(self.data)//2])
+            self.right = Tree(self.data[len(self.data)//2:])
+
+
+
 
 
         pass
