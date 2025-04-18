@@ -1,4 +1,12 @@
 # Adapted from Géron
+"""
+
+Author: <Braydon King>
+I was able to get the same level of performance by reducing the size of each layer by two and changing the activation
+functions. In order to get the same level of performance on the test set I had to train it for double the amount of
+epochs. The program takes about 2-5 minutes to run depending on the machine.
+
+"""
 
 import tensorflow as tf
 
@@ -12,15 +20,14 @@ X_train, X_valid, X_test = X_train / 255., X_valid / 255., X_test / 255.
 # Set the random number seed
 tf.random.set_seed(42)
 
-# Define the model
+#Define convolutional neural network
 model = tf.keras.Sequential()
-model.add(tf.keras.layers.InputLayer(input_shape=[28, 28]))
+model.add(tf.keras.layers.InputLayer(input_shape=[28, 28, 1]))
+model.add(tf.keras.layers.Conv2D(16, (3, 3), activation='linear', kernel_initializer='he_uniform'))
+model.add(tf.keras.layers.Conv2D(32, (3, 3), activation='selu', kernel_initializer='he_uniform'))
+model.add(tf.keras.layers.Conv2D(64, (3, 3), activation='relu', kernel_initializer='he_uniform'))
 model.add(tf.keras.layers.Flatten())
-model.add(tf.keras.layers.Dense(300, activation="relu"))
-model.add(tf.keras.layers.Dense(100, activation="relu"))
 model.add(tf.keras.layers.Dense(10, activation="softmax"))
-
-# TODO Replace the above code with the definition of your convolutional network
 
 # Compile the model
 model.compile(loss="sparse_categorical_crossentropy",
@@ -28,12 +35,10 @@ model.compile(loss="sparse_categorical_crossentropy",
               metrics=["accuracy"])
 
 # Train the model
-# TODO You may be able to turn down the number of epochs
-history = model.fit(X_train, y_train, epochs=30, validation_data=(X_valid, y_valid))
+history = model.fit(X_train, y_train, epochs=10, validation_data=(X_valid, y_valid))
 
 # Evaluate the model on test data
-# TODO Uncomment this, but only once you are sure you have your final model!
-# model.evaluate(X_test, y_test)
+model.evaluate(X_test, y_test)
 
 # Plot the learning curve
 import matplotlib.pyplot as plt
